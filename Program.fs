@@ -28,22 +28,29 @@ type Not<'a> = Not of 'a with
 type BadType = BadType with
     static member inline eval (_ : Ty<BadType>) = ty<BadType>
 
-type Nil = Nil with
-    static member inline eval (_ : Ty<Nil>) = ty<Nil>
+type Nil = Nil
 
-type Cons<'car, 'cdr> = Cons of 'car * 'cdr with
-    static member inline eval (_ : Ty<Cons< ^Car , ^Cdr >>) : _
-        when ^Car : (static member eval : Ty< ^Car > -> Ty< ^ECar >)
-        and ^Cdr : (static member eval : Ty< ^Cdr > -> Ty< ^ECdr >) = ty<Cons< ^ECar , ^ECdr >>
-    static member inline car (_ : Ty<Cons< ^Car, _ >>) = ty< ^Car >
-    static member inline cdr (_ : Ty<Cons< _, ^Cdr >>) = ty< ^Cdr >
+type Cons< ^Car, ^Cdr > =
+    | Cons of ^Car * ^Cdr
 
+    static member inline car (list : Cons< ^Car, ^Cdr >) : ^Car =
+        match list with
+        | Cons (car', _) -> car'
+
+    static member inline cdr (list : Cons< ^Car , ^Cdr >) : ^Cdr =
+        match list with
+        | Cons (_, cdr') -> cdr'
+
+    // static member inline append (listA : Cons< ^ACar , ^ACdr >) (listB : Cons< ^BCar , ^BCdr >) =
+
+(*
 type Append<'a, 'b> = Append of 'a * 'b with
     static member inline eval (_ : Ty<Append< ^A , Nil>>) = ty< ^A >
     static member inline eval (_ : Ty<Append< Nil, ^B >>) = ty< ^B >
     static member inline eval (_ : Ty<Append< ^A , ^B >>) : _
         when ^A : (static member car : Ty< ^A > -> Ty< ^ACar >)
         and ^A : (static member cdr : Ty< ^A > -> Ty< ^ACdr >) = ty<Cons< ^ACar , Append< ^ACdr , ^B >>>
+*)
 
 [<EntryPoint>]
 let main _ =
@@ -60,6 +67,7 @@ let main _ =
     // let err1 = eval ty<int> // 型 int は演算子 eval をサポートしていません
     // let err2 = eval ty<Not<BadType>> // 型 BadType は演算子 ifThenElse をサポートしていません
 
+    (*
     // FIXME: 1 回の eval で Append<_,_> 全部展開してほしい～～～
     let list =
         ty<Append<Cons<True, Cons<False, Nil>>, Cons<True, Nil>>>
@@ -67,4 +75,10 @@ let main _ =
         |> eval
         |> eval
     printfn "%s: %A" (nameof list) list
+    *)
+
+    let list = Cons (1, Cons(2, Nil))
+    let list2 = Cons.cdr list
+    let list3 = Cons.cdr list2
+    // let list4 = Cons.cdr list3 // 型エラー
     0
