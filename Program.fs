@@ -1,84 +1,49 @@
-[<Struct>]
-type Ty<'Type> =
-    override _.ToString() =
-        typeof<'Type>
-            .ToString()
-            .Replace("[", "<")
-            .Replace("]", ">")
-            .Replace("`1", "")
-            .Replace("`2", "")
-
-let inline ty< ^T > : Ty< ^T > = Ty()
+let inline eval (x : ^X) =
+    (^X : (static member eval : ^X -> ^EX) x)
 
 type True = True with
-    static member inline eval (_ : Ty<True>) = ty<True>
-    static member inline ifThenElse (_ : Ty<True>, x, _) = x
+    static member inline eval (x : True) = x
 
 type False = False with
-    static member inline eval (_ : Ty<False>) = ty<False>
-    static member inline ifThenElse (_ : Ty<False>, _, y) = y
+    static member inline eval (x : False) = x
 
-let inline eval (x : Ty< ^A >) : Ty< ^B > =
-    (^A : (static member inline eval : Ty< ^A > -> Ty< ^B >) x)
+type TInt = TInt of int with
+    static member inline eval (x : TInt) = x
 
-type Not<'a> = Not of 'a with
-    static member inline eval (_ : Ty<Not< ^A >>) : Ty< ^B > when ^A : (static member eval : Ty< ^A > -> Ty< ^Bool >) =
-        (^Bool : (static member ifThenElse : Ty< ^Bool > * _ * _ -> Ty< ^B >) ty< ^Bool >, ty<False>, ty<True>)
+type Nil = Nil with
+    static member inline eval (x : Nil) = x
+    static member inline append (_ : Nil, b : ^B) = b
 
-type BadType = BadType with
-    static member inline eval (_ : Ty<BadType>) = ty<BadType>
+type Cons<'car, 'cdr> =
+    | Cons of 'car * 'cdr
 
-type Nil = Nil
+    static member inline eval ((Cons (car, cdr)) : Cons< ^Car , ^Cdr >) =
+        Cons (
+            (^Car : (static member eval : ^Car -> ^ECar) car),
+            (^Cdr : (static member eval : ^Cdr -> ^ECdr) cdr))
 
-type Cons< ^Car, ^Cdr > =
-    | Cons of ^Car * ^Cdr
+    static member inline append ((Cons (acar, acdr)) : Cons< ^ACar , ^ACdr >, b : ^B) =
+        Cons (acar, (^ACdr : (static member inline append : ^ACdr -> ^B -> ^C) acdr, b))
 
-    static member inline car (list : Cons< ^Car, ^Cdr >) : ^Car =
-        match list with
-        | Cons (car', _) -> car'
-
-    static member inline cdr (list : Cons< ^Car , ^Cdr >) : ^Cdr =
-        match list with
-        | Cons (_, cdr') -> cdr'
-
-    // static member inline append (listA : Cons< ^ACar , ^ACdr >) (listB : Cons< ^BCar , ^BCdr >) =
-
-(*
 type Append<'a, 'b> = Append of 'a * 'b with
-    static member inline eval (_ : Ty<Append< ^A , Nil>>) = ty< ^A >
-    static member inline eval (_ : Ty<Append< Nil, ^B >>) = ty< ^B >
-    static member inline eval (_ : Ty<Append< ^A , ^B >>) : _
-        when ^A : (static member car : Ty< ^A > -> Ty< ^ACar >)
-        and ^A : (static member cdr : Ty< ^A > -> Ty< ^ACdr >) = ty<Cons< ^ACar , Append< ^ACdr , ^B >>>
-*)
+    static member inline eval ((Append (a, b)): Append< ^A , ^B >) : _
+        when ^A : (static member eval : ^A -> ^EA) =
+        (^EA : (static member append : _ * _ -> _) a, b)
+
+let inline car ((Cons (car', _)) : Cons< ^A , ^B >) = car'
+
+let inline cdr ((Cons (_, cdr')) : Cons< ^A , ^B >) = cdr'
 
 [<EntryPoint>]
 let main _ =
-    let true_ = eval ty<True> // : Ty<True>
-    printfn "%s: %A" (nameof true_) true_
-    let false_ = eval ty<False> // : Ty<False>
-    printfn "%s: %A" (nameof false_) false_
-    let notTrue = eval ty<Not<True>> // : Ty<False>
-    printfn "%s: %A" (nameof notTrue) notTrue
-    let notFalse = eval ty<Not<False>> // : Ty<True>
-    printfn "%s: %A" (nameof notFalse) notFalse
-    let notNotTrue = eval ty<Not<Not<True>>> // : Ty<True>
-    printfn "%s: %A" (nameof notNotTrue) notNotTrue
-    // let err1 = eval ty<int> // 型 int は演算子 eval をサポートしていません
-    // let err2 = eval ty<Not<BadType>> // 型 BadType は演算子 ifThenElse をサポートしていません
-
-    (*
-    // FIXME: 1 回の eval で Append<_,_> 全部展開してほしい～～～
+    let listA = Cons (TInt 10, Cons (True, Nil))
+    let listB = Cons (False, Nil)
     let list =
-        ty<Append<Cons<True, Cons<False, Nil>>, Cons<True, Nil>>>
+        Append (listA, listB)
         |> eval
-        |> eval
-        |> eval
-    printfn "%s: %A" (nameof list) list
-    *)
-
-    let list = Cons (1, Cons(2, Nil))
-    let list2 = Cons.cdr list
-    let list3 = Cons.cdr list2
-    // let list4 = Cons.cdr list3 // 型エラー
+    printfn "list = %A" list  // => Cons (TInt 10, Cons (True, Cons (False, Nil)))
+    let car' = car list
+    printfn "car' = %A" car'  // => TInt 10
+    let cdr' = cdr list
+    printfn "cdr' = %A" cdr'  // => Cons (True, Cons (False, Nil))
     0
