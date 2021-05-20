@@ -52,7 +52,6 @@ type Last<'t> = Last of 't with
         (^ET : (static member last : _ -> _) list)
 
 let inline car ((Cons (car', _)) : Cons< ^A , ^B >) = car'
-
 let inline cdr ((Cons (_, cdr')) : Cons< ^A , ^B >) = cdr'
 
 [<EntryPoint>]
@@ -63,6 +62,7 @@ let main _ =
         Append (listA, listB)
         |> eval
     printfn "list = %A" list  // => Cons (TInt 10, Cons (True, Cons (False, Nil)))
+    printfn "     : %s" (string (list.GetType()))
     let car' = car list
     printfn "car' = %A" car'  // => TInt 10
     let cdr' = cdr list
