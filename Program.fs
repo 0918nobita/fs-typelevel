@@ -32,6 +32,10 @@ type Cons<'car, 'cdr> =
             (^Cdr : (static member inline reverse : ^Cdr -> ^RCdr) cdr),
             Cons (car, Nil))
 
+    static member inline last ((Cons (car, _)) : Cons< ^Car , Nil >) = car
+    static member inline last ((Cons (_, cdr)) : Cons< _ , ^Cdr >) =
+        (^Cdr : (static member inline last : ^Cdr -> _) cdr)
+
 type Append<'a, 'b> = Append of 'a * 'b with
     static member inline eval ((Append (a, b)): Append< ^A , ^B >) : _
         when ^A : (static member eval : ^A -> ^EA) =
@@ -41,6 +45,11 @@ type Reverse<'t> = Reverse of 't with
     static member inline eval ((Reverse list) : Reverse< ^T >) : _
         when ^T : (static member eval : ^T -> ^ET) =
         (^ET : (static member reverse : _ -> _) list)
+
+type Last<'t> = Last of 't with
+    static member inline eval ((Last list) : Last< ^T >) : _
+        when ^T : (static member eval : ^T -> ^ET) =
+        (^ET : (static member last : _ -> _) list)
 
 let inline car ((Cons (car', _)) : Cons< ^A , ^B >) = car'
 
@@ -58,8 +67,14 @@ let main _ =
     printfn "car' = %A" car'  // => TInt 10
     let cdr' = cdr list
     printfn "cdr' = %A" cdr'  // => Cons (True, Cons (False, Nil))
+    // let err1 = car Nil  // 型エラー
+    // let err2 = cdr Nil  // 型エラー
     let rev =
         Reverse list
         |> eval
     printfn "rev = %A" rev  // => Cons (False, Cons (True, Cons (TInt 10, Nil)))
+    let last =
+        Last list
+        |> eval
+    printfn "last = %A" last // False
     0
