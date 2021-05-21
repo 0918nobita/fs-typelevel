@@ -54,10 +54,12 @@ type Last<'t> = Last of 't with
 let inline car ((Cons (car', _)) : Cons< ^A , ^B >) = car'
 let inline cdr ((Cons (_, cdr')) : Cons< ^A , ^B >) = cdr'
 
+type A = MyTypeProvider.WithExclamationMark<"Hello">
+
 [<EntryPoint>]
 let main _ =
-    printfn "TypeSafeList.Type1.StaticProperty = %A" <| TypeSafeList.Type1.StaticProperty
-    printfn "TypeSafeList.Type100()            = %A" <| TypeSafeList.Type100()
+    printfn "A.Value = %s" <| A.Value // => Hello!
+
     let listA = Cons (TInt 10, Cons (True, Nil))
     let listB = Cons (False, Nil)
     let list =
