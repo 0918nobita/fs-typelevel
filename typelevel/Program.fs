@@ -56,6 +56,8 @@ let inline cdr ((Cons (_, cdr')) : Cons< ^A , ^B >) = cdr'
 
 [<EntryPoint>]
 let main _ =
+    printfn "TypeSafeList.Type1.StaticProperty = %A" <| TypeSafeList.Type1.StaticProperty
+    printfn "TypeSafeList.Type100()            = %A" <| TypeSafeList.Type100()
     let listA = Cons (TInt 10, Cons (True, Nil))
     let listB = Cons (False, Nil)
     let list =

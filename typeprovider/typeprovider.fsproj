@@ -2,7 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <NoWarn>3218,3390</NoWarn>
   </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\paket-files\fsprojects\FSharp.TypeProviders.SDK\src\ProvidedTypes.fsi">
       <Paket>True</Paket>
@@ -14,5 +16,6 @@
     </Compile>
     <Compile Include="Library.fs" />
   </ItemGroup>
+
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
