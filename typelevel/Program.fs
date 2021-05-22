@@ -58,27 +58,28 @@ type A = MyTypeProvider.WithExclamationMark<"Hello">
 
 [<EntryPoint>]
 let main _ =
-    printfn "A.Value = %s" <| A.Value // => Hello!
+    printfn "A.Value = %s" <| A.Value
 
     let listA = Cons (TInt 10, Cons (True, Nil))
     let listB = Cons (False, Nil)
     let list =
         Append (listA, listB)
         |> eval
-    printfn "list = %A" list  // => Cons (TInt 10, Cons (True, Cons (False, Nil)))
+    printfn "list = %A" list
     printfn "     : %s" (string (list.GetType()))
+
     let car' = car list
-    printfn "car' = %A" car'  // => TInt 10
+    printfn "car' = %A" car'
     let cdr' = cdr list
-    printfn "cdr' = %A" cdr'  // => Cons (True, Cons (False, Nil))
-    // let err1 = car Nil  // 型エラー
-    // let err2 = cdr Nil  // 型エラー
+    printfn "cdr' = %A" cdr'
+
     let rev =
         Reverse list
         |> eval
-    printfn "rev = %A" rev  // => Cons (False, Cons (True, Cons (TInt 10, Nil)))
+    printfn "rev = %A" rev
+
     let last =
         Last list
         |> eval
-    printfn "last = %A" last // False
+    printfn "last = %A" last
     0
