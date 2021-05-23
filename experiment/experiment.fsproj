@@ -1,17 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Program.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\typeprovider\typeprovider.fsproj" />
-    <ProjectReference Include="..\experiment\experiment.fsproj" />
+    <Compile Include="Library.fs" />
   </ItemGroup>
 
   <Import Project="..\.paket\Paket.Restore.targets" />

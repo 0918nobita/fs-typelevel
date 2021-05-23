@@ -7,6 +7,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "typelevel", "typelevel\type
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "typeprovider", "typeprovider\typeprovider.fsproj", "{879798FA-3127-46CC-B7F4-193C033D1844}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "experiment", "experiment\experiment.fsproj", "{1C86327C-AF4F-49E7-BF89-D3D471DD9929}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,17 @@ Global
 		{879798FA-3127-46CC-B7F4-193C033D1844}.Release|x64.Build.0 = Release|Any CPU
 		{879798FA-3127-46CC-B7F4-193C033D1844}.Release|x86.ActiveCfg = Release|Any CPU
 		{879798FA-3127-46CC-B7F4-193C033D1844}.Release|x86.Build.0 = Release|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Debug|x64.Build.0 = Debug|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Debug|x86.Build.0 = Debug|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Release|x64.ActiveCfg = Release|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Release|x64.Build.0 = Release|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Release|x86.ActiveCfg = Release|Any CPU
+		{1C86327C-AF4F-49E7-BF89-D3D471DD9929}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
